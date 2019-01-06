@@ -38,10 +38,11 @@ def eprintf(fmtstring: str, *args: Any) -> None:
 
 
 def exists(expectedversion: str) -> bool:
-    if os.path.exists("meson"):
+    mesonbinary = os.path.join("meson", "meson.py")
+    if os.path.isfile(mesonbinary):
         # could throw exception, but it probably won't
         mesonver: str = subprocess.run(
-            ["meson/meson.py", "--version"],
+            [mesonbinary, "--version"],
             check=True,
             encoding="utf-8",
             stdout=subprocess.PIPE,
@@ -67,19 +68,18 @@ def isvalidhash(file: bytes, expectedhash: str) -> bool:
     return hasher.hexdigest() == expectedhash
 
 
-def checkedrename(oldpath: str, newpath: str) -> None:
-    if oldpath != TAR_DIR:
+def checkedrename(src: str, dst: str) -> None:
+    if src != TAR_DIR:
         eprintf(
             "The archive extracted path was unexpected. "
             "Please try to extract it yourself"
         )
         sys.exit(1)
-    if os.path.exists(newpath):
-        eprintf(
-            "Directory {} exists, it is needed for meson to be downloaded to.", newpath
-        )
+    if os.path.exists(dst):
+        eprintf("Renaming {0} to {1} would overwrite. Please remove {1}.", src, dst)
+        sys.exit(1)
 
-        os.rename(oldpath, newpath)
+    os.rename(src, dst)
 
 
 def untar(tar: io.BytesIO) -> None:
