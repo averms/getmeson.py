@@ -2,7 +2,6 @@
 # Download meson to the current directory.
 #
 # Copyright 2019 Aman Verma
-#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -15,14 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import hashlib
 import io
 import os
 import subprocess
 import sys
-import tarfile
-import urllib.error
-import urllib.request
 from typing import Any
 
 VERSION = "0.49.0"
@@ -52,18 +47,26 @@ def exists(expectedversion: str) -> bool:
 
 
 def gettar(url: str) -> bytes:
+    import urllib.error
+    import urllib.request
+
     try:
         print("Downloading {}...".format(url))
-        return urllib.request.urlopen(url).read()
+        page = urllib.request.urlopen(url)
+        return page.read()
     except urllib.error.HTTPError as e:
         eprintf(str(e.code))
         sys.exit(1)
     except urllib.error.URLError as e:
         eprintf("{}\nCheck your network connection.", e.reason)
         sys.exit(1)
+    finally:
+        page.close()
 
 
 def isvalidhash(file: bytes, expectedhash: str) -> bool:
+    import hashlib
+
     hasher = hashlib.sha512(file)
     return hasher.hexdigest() == expectedhash
 
@@ -82,9 +85,12 @@ def checkedrename(src: str, dst: str) -> None:
     os.rename(src, dst)
 
 
-def untar(tar: io.BytesIO) -> None:
+def untartodir(tar: bytes) -> None:
+    import tarfile
+
     try:
-        t = tarfile.open(fileobj=tar, mode="r")
+        tarbuffered: io.BytesIO = io.BytesIO(tar)
+        t = tarfile.open(fileobj=tarbuffered, mode="r")
         ogdir: str = t.getmembers()[0].name
         t.extractall()
     except tarfile.CompressionError as e:
@@ -92,8 +98,7 @@ def untar(tar: io.BytesIO) -> None:
     else:
         checkedrename(ogdir, "meson")
     finally:
-        # not ideal to close in function.
-        tar.close()
+        tarbuffered.close()
         t.close()
 
 
@@ -105,9 +110,9 @@ if not exists(VERSION):
             URL,
         )
         sys.exit(1)
-    mesontar = gettar(URL)
+    mesontar: bytes = gettar(URL)
     if isvalidhash(mesontar, SHA512):
-        untar(io.BytesIO(mesontar))
+        untartodir(mesontar)
         print(
             "Meson should be installed. You can run it with `meson/meson.py` on *nix",
             "and `python.exe meson\\meson.py` on Windows",
