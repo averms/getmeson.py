@@ -55,7 +55,7 @@ def gettar(url: str) -> bytes:
         page = urllib.request.urlopen(url)
         return page.read()
     except urllib.error.HTTPError as e:
-        eprintf(str(e.code))
+        eprintf("{}\nCheck if {} is up.", e.code, url)
         sys.exit(1)
     except urllib.error.URLError as e:
         eprintf("{}\nCheck your network connection.", e.reason)
@@ -114,8 +114,8 @@ if not exists(VERSION):
     if isvalidhash(mesontar, SHA512):
         untartodir(mesontar)
         print(
-            "Meson should be installed. You can run it with `meson/meson.py` on *nix",
-            "and `python.exe meson\\meson.py` on Windows",
+            "Meson should be installed. You can run it with `./meson/meson.py` on *nix"
+            " and `python.exe meson\\meson.py` on Windows"
         )
     else:
         eprintf(
