@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -----------------------------------------------------------------------------
 # Download meson to the current directory.
 #
 # Copyright 2019 Aman Verma
@@ -13,17 +14,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# -----------------------------------------------------------------------------
 import io
 import os
 import subprocess
 import sys
 from typing import Any
 
-VERSION = "0.49.0"
+VERSION = "0.49.1"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA512 = "f36994d1a030c985a51aa335eaceea608dcb1692cea7d2d4caeeb2b3bf471837dffdc502aa940742eb8c605d15b8adb35ba36b7da5d10455b7fd0ef5a48663e3"
+SHA512 = "2a9a3d1e1eae3f9f21f47c0efb2ecd78861a71109fa5a660bf6403df2d5bd5c31fa2ef848080ca72d25257836b9e00e2fb89d5fc281647600ece0179c703cfe8"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
@@ -79,8 +80,9 @@ def checkedrename(src: str, dst: str) -> None:
         )
         sys.exit(1)
     if os.path.exists(dst):
-        eprintf("Renaming {0} to {1} would overwrite. Please remove {1}.", src, dst)
-        sys.exit(1)
+        import shutil
+        eprintf("Overwriting {}.", dst)
+        shutil.rmtree(dst)
 
     os.rename(src, dst)
 
