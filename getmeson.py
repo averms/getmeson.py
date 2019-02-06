@@ -6,9 +6,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
 #     http://www.apache.org/licenses/LICENSE-2.0
-#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +19,10 @@ import subprocess
 import sys
 from typing import Any
 
-VERSION = "0.49.1"
+VERSION = "0.49.2"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA512 = "2a9a3d1e1eae3f9f21f47c0efb2ecd78861a71109fa5a660bf6403df2d5bd5c31fa2ef848080ca72d25257836b9e00e2fb89d5fc281647600ece0179c703cfe8"
+SHA256 = "ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
@@ -68,7 +66,7 @@ def gettar(url: str) -> bytes:
 def isvalidhash(file: bytes, expectedhash: str) -> bool:
     import hashlib
 
-    hasher = hashlib.sha512(file)
+    hasher = hashlib.sha256(file)
     return hasher.hexdigest() == expectedhash
 
 
@@ -81,6 +79,7 @@ def checkedrename(src: str, dst: str) -> None:
         sys.exit(1)
     if os.path.exists(dst):
         import shutil
+
         eprintf("Overwriting {}.", dst)
         shutil.rmtree(dst)
 
@@ -113,7 +112,7 @@ if not exists(VERSION):
         )
         sys.exit(1)
     mesontar: bytes = gettar(URL)
-    if isvalidhash(mesontar, SHA512):
+    if isvalidhash(mesontar, SHA256):
         untartodir(mesontar)
         print(
             "Meson should be installed. You can run it with `./meson/meson.py` on *nix"
