@@ -16,11 +16,6 @@ exit status
 Exit code of 0 is good, it means you already have meson or the download was
 successful. Exit code of 1 means that something went wrong.
 
-bugs
-----
-If getmeson.py errors, it won't clean up after itself, i.e., there may be a
-`meson/` or `meson-{VERSION}/` directory left over.
-
 license
 -------
 Distributed under the same terms as meson itself (Apache License 2.0).
