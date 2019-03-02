@@ -17,7 +17,6 @@ import io
 import os
 import subprocess
 import sys
-from typing import Any
 
 VERSION = "0.49.2"
 # fmt: off
