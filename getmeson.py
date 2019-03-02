@@ -27,14 +27,11 @@ SHA256 = "ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd"
 TAR_DIR = "meson-" + VERSION
 
 
-def eprintf(fmtstring: str, *args: Any) -> None:
-    print(fmtstring.format(*args), file=sys.stderr)
-
-
 def exists(expectedversion: str) -> bool:
     mesonbinary = os.path.join("meson", "meson.py")
+
     if os.path.isfile(mesonbinary):
-        # could throw exception, but it probably won't
+        # possibility of an exception here...
         mesonver: str = subprocess.run(
             [mesonbinary, "--version"],
             check=True,
@@ -42,6 +39,7 @@ def exists(expectedversion: str) -> bool:
             stdout=subprocess.PIPE,
         ).stdout.rstrip()
         return mesonver == expectedversion
+
     return False
 
 
@@ -54,11 +52,9 @@ def gettar(url: str) -> bytes:
         page = urllib.request.urlopen(url)
         return page.read()
     except urllib.error.HTTPError as e:
-        eprintf("{}\nCheck if {} is up.", e.code, url)
-        sys.exit(1)
+        sys.exit("{}\nCheck if {} is up.".format(e.code, url))
     except urllib.error.URLError as e:
-        eprintf("{}\nCheck your network connection.", e.reason)
-        sys.exit(1)
+        sys.exit("{}\nCheck your network connection.".format(e.reason))
     finally:
         page.close()
 
@@ -66,21 +62,19 @@ def gettar(url: str) -> bytes:
 def isvalidhash(file: bytes, expectedhash: str) -> bool:
     import hashlib
 
-    hasher = hashlib.sha256(file)
-    return hasher.hexdigest() == expectedhash
+    return hashlib.sha256(file).hexdigest() == expectedhash
 
 
 def checkedrename(src: str, dst: str) -> None:
     if src != TAR_DIR:
-        eprintf(
+        sys.exit(
             "The archive extracted path was unexpected. "
             "Please try to extract it yourself"
         )
-        sys.exit(1)
     if os.path.exists(dst):
         import shutil
 
-        eprintf("Overwriting {}.", dst)
+        print("Overwriting {}.".format(dst))
         shutil.rmtree(dst)
 
     os.rename(src, dst)
@@ -92,12 +86,12 @@ def untartodir(tar: bytes) -> None:
     try:
         tarbuffered: io.BytesIO = io.BytesIO(tar)
         t = tarfile.open(fileobj=tarbuffered, mode="r")
-        ogdir: str = t.getmembers()[0].name
+        extracteddir = t.getmembers()[0].name
         t.extractall()
     except tarfile.CompressionError as e:
         print(str(e), file=sys.stderr)
     else:
-        checkedrename(ogdir, "meson")
+        checkedrename(extracteddir, "meson")
     finally:
         tarbuffered.close()
         t.close()
@@ -105,13 +99,13 @@ def untartodir(tar: bytes) -> None:
 
 if not exists(VERSION):
     if "-n" in sys.argv[1:]:
-        eprintf(
-            "Did not find meson-{} and dry run was requested.\nWould have installed {}",
-            VERSION,
-            URL,
+        sys.exit(
+            (
+                "Did not find meson-{} and dry run was requested.\n"
+                "Would have installed {}"
+            ).format(VERSION, URL)
         )
-        sys.exit(1)
-    mesontar: bytes = gettar(URL)
+    mesontar = gettar(URL)
     if isvalidhash(mesontar, SHA256):
         untartodir(mesontar)
         print(
@@ -119,10 +113,9 @@ if not exists(VERSION):
             " and `python.exe meson\\meson.py` on Windows"
         )
     else:
-        eprintf(
+        sys.exit(
             "The checksum of the downloaded file does not match!\n"
             "Please download and verify the file manually."
         )
 else:
     print("Found meson, skipping download.")
-    sys.exit(0)
