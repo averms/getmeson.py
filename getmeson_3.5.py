@@ -26,12 +26,12 @@ SHA256 = "ef9f14326ec1e30d3ba1a26df0f92826ede5a79255ad723af78a2691c37109fd"
 TAR_DIR = "meson-" + VERSION
 
 
-def exists(expectedversion: str) -> bool:
+def exists(expectedversion):
     mesonbinary = os.path.join("meson", "meson.py")
 
     if os.path.isfile(mesonbinary):
         # possibility of an exception here...
-        mesonver: str = subprocess.run(
+        mesonver = subprocess.run(
             [mesonbinary, "--version"],
             check=True,
             # alias for text that is compatible with 3.5
@@ -43,7 +43,7 @@ def exists(expectedversion: str) -> bool:
     return False
 
 
-def gettar(url: str) -> bytes:
+def gettar(url):
     import urllib.error
     import urllib.request
 
@@ -59,13 +59,13 @@ def gettar(url: str) -> bytes:
         page.close()
 
 
-def isvalidhash(file: bytes, expectedhash: str) -> bool:
+def isvalidhash(file, expectedhash):
     import hashlib
 
     return hashlib.sha256(file).hexdigest() == expectedhash
 
 
-def checkedrename(src: str, dst: str) -> None:
+def checkedrename(src, dst):
     if src != TAR_DIR:
         sys.exit(
             "The archive extracted path was unexpected. "
@@ -80,11 +80,11 @@ def checkedrename(src: str, dst: str) -> None:
     os.rename(src, dst)
 
 
-def untartodir(tar: bytes) -> None:
+def untartodir(tar):
     import tarfile
 
     try:
-        tarbuffered: io.BytesIO = io.BytesIO(tar)
+        tarbuffered = io.BytesIO(tar)
         t = tarfile.open(fileobj=tarbuffered, mode="r")
         extracteddir = t.getmembers()[0].name
         t.extractall()
