@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -----------------------------------------------------------------------------
 # Download meson to the current directory.
 #
 # Copyright 2019 Aman Verma
@@ -12,16 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# -----------------------------------------------------------------------------
+
 import io
 import os
 import subprocess
 import sys
 
-VERSION = "0.50.1"
+VERSION = "0.51.0"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA256 = "f68f56d60c80a77df8fc08fa1016bc5831605d4717b622c96212573271e14ecc"
+SHA256 = "2f75fdf6d586d3595c03a07afcd0eaae11f68dd33fea5906a434d22a409ed63f"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
