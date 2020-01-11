@@ -17,10 +17,10 @@ import os
 import subprocess
 import sys
 
-VERSION = "0.51.1"
+VERSION = "0.53.0"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA256 = "f27b7a60f339ba66fe4b8f81f0d1072e090a08eabbd6aa287683b2c2b9dd2d82"
+SHA256 = "035e75993ab6fa6c9ebf902b835c64cf397a763eb8e65c9bb6e1cc9730a9d3f6"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
