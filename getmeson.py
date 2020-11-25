@@ -24,10 +24,10 @@ import urllib.request
 from http.client import HTTPResponse
 from typing import Any, NoReturn
 
-VERSION = "0.55.1"
+VERSION = "0.56.0"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA256 = "3b5741f884e04928bdfa1947467ff06afa6c98e623c25cef75adf71ca39ce080"
+SHA256 = "291dd38ff1cd55fcfca8fc985181dd39be0d3e5826e5f0013bf867be40117213"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
@@ -73,7 +73,6 @@ def checked_rename(src: str, dst: str) -> None:
             "Please try to extract it yourself"
         )
     if os.path.exists(dst):
-
         print("Overwriting {}.".format(dst))
         shutil.rmtree(dst)
 
