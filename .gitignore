@@ -1,6 +1,7 @@
+*.patch
 .DS_Store
 .mypy_cache/
-__pycache__/
+/.vscode/
 /test/
 /venv/
-*.patch
+__pycache__/
