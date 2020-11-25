@@ -6,7 +6,8 @@ description
 A Python script that downloads a release of the Meson Build system to ./meson and checks
 its hash. Use it in your projects if you don't want to require users to `pip install
 meson`. Also use it to freeze a specific version of Meson. The file getmeson.py is
-compatible with 3.6 and up. The file getmeson_3.5.py is compatible with 3.5 and up
+compatible with 3.6 and up. The file `getmeson_3.5.py` is compatible with
+Python 3.5 and up.
 
 options
 -------
