@@ -26,4 +26,6 @@ successful. Exit code of 1 means that something went wrong.
 
 license
 -------
-Distributed under the same terms as Meson itself (Apache License 2.0).
+Distributed under the 0-clause BSD license, a [public-domain-equivalent
+license](https://en.wikipedia.org/wiki/Public-domain-equivalent_license)
+approved by the Open Source Initiative.
