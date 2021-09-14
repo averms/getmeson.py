@@ -11,8 +11,8 @@ specific version of Meson that you know works correctly.
 
 usage
 -----
-Copy the the file `getmeson.py` into your source tree. Update `VERSION`,
-`URL`, and `SHA256` at the top of the script when you want to change the
+Copy the the file `getmeson.py` into your source tree. Update `VERSION`
+and `SHA256` at the top of the script when you want to change the
 version it downloads.
 
 options
