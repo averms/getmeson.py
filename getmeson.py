@@ -14,10 +14,10 @@ import urllib.request
 from http.client import HTTPResponse
 from typing import Any, NoReturn
 
-VERSION = "0.56.0"
+VERSION = "0.59.1"
 # fmt: off
 URL = "https://github.com/mesonbuild/meson/releases/download/{0}/meson-{0}.tar.gz".format(VERSION)
-SHA256 = "291dd38ff1cd55fcfca8fc985181dd39be0d3e5826e5f0013bf867be40117213"
+SHA256 = "db586a451650d46bbe10984a87b79d9bcdc1caebf38d8e189f8848f8d502356d"
 # fmt: on
 TAR_DIR = "meson-" + VERSION
 
